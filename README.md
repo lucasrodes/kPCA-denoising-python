@@ -39,8 +39,8 @@ deactivate
 - Summarize the paper for our colleagues
 - Implementation
 - Create nice examples (data, plots...)
-  - example [one](http://scikit-learn.org/stable/auto_examples/decomposition/plot_kernel_pca.html)
-  -   example [two](http://sebastianraschka.com/Articles/2014_kernel_pca.html)
+  - [Example 1](http://scikit-learn.org/stable/auto_examples/decomposition/plot_kernel_pca.html)
+  - [Example 2](http://sebastianraschka.com/Articles/2014_kernel_pca.html)
 - Write report
 - Prepare presentation slides and rehearse
 - Sign up for presentation?
@@ -56,3 +56,6 @@ deactivate
 | 10/01/2017 | 1st Draft of the report                  |
 | 15/01/2017 | Presentation finished, Presentation test |
 | 16/01/2017 | Day of the presentation (sign up?)       |
+
+## Interesting links
+- [Kernel Principal Component Analysis and its Applications in Face Recognition and Active Shape Models](https://arxiv.org/pdf/1207.3538v3.pdf)
