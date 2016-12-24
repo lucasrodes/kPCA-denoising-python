@@ -59,3 +59,5 @@ deactivate
 
 ## Interesting links
 - [Kernel Principal Component Analysis and its Applications in Face Recognition and Active Shape Models](https://arxiv.org/pdf/1207.3538v3.pdf)
+- [Support Vector Learning](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.35.380&rep=rep1&type=pdf)
+- [sklearn.decomposition.KernelPCA](http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.KernelPCA.html)
