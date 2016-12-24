@@ -1,0 +1,1 @@
+Python implementations of [Example 2](http://sebastianraschka.com/Articles/2014_kernel_pca.html). Only the Half-moon shapes set is considered.
