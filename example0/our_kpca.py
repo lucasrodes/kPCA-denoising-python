@@ -45,7 +45,8 @@ class kPCA():
         print("--- Gammas obtained")
         print("--- Iterative scheme started...")
         self.Z = []
-        for i in range(np.size(self.Xtest,0)):
+        # Obtain pre-image for each test sample
+        for i in range(np.size(self.Xtest, 0)):
             # Find z, pre-image
             z = self.obtain_preimage(i, n, c)
             self.Z.append(z)
@@ -63,15 +64,21 @@ class kPCA():
         """
         z_new = self.Xtest[j, :]
         z = np.zeros((10, 1))
-        while np.max(z - z_new) > 0.00001:
+        n_iter = 0
+        # Convergence defined as difference
+        #while (np.max(z - z_new) > 0.00001) and (n_iter < 1e3):
+        while (np.linalg.norm(z - z_new) > 0.0001) and (n_iter < 1e3):
             z = z_new
             zcoeff = cdist([z], self.Xtrain, 'sqeuclidean')
             zcoeff = np.exp(-zcoeff/(n*c))
             zcoeff = self.gammas[j, :] * zcoeff
             s = np.sum(zcoeff)
             zcoeff = np.sum(self.Xtrain*zcoeff.T, axis=0)
-            #s = np.dot(self.gammas[j, :], zcoeff.T)
+            # Avoid underflow
+            if s == 0:
+                s += 1e-8
             z_new = zcoeff/s
+            n_iter += 1
         return z_new
 
     def obtain_rbf_kernel_matrix(self, n, c):
@@ -87,7 +94,8 @@ class kPCA():
         K = np.exp(-sqdist_X / (n * c))
         return self.center_kernel_matrix(K, K)
 
-    def center_kernel_matrix(self, K, Ktrain):
+    @staticmethod
+    def center_kernel_matrix(K, Ktrain):
         """
         :param K: Kernel matrix that we aim to center
         :param Ktrain: training Kernel matrix
