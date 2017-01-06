@@ -34,7 +34,8 @@ class kPCA():
         # Obtain eigenvectors from K
         self.alphas = self.obtain_alphas(self.Ktrain, n)  # l_train x n
         print("--- Alphas obtained")
-        # Obtain RBF Kernel Matrix for test data, dim: l_test x l_train
+        # Obtain RBF Kernel Matrix for test data, dim: l_test x l_train (
+        # REVISE THIS STEP)
         self.Ktest = self.obtain_test_rbf_kernel_matrix(n, c, self.Ktrain)
         print("--- Kernel matrix for test obtained")
         # Obtain betas
@@ -45,12 +46,12 @@ class kPCA():
         print("--- Gammas obtained")
         print("--- Iterative scheme started...")
         self.Z = []
-        # Obtain pre-image for each test sample
+        # Obtain pre-image for each test sample (REVISE THIS STEP)
         for i in range(np.size(self.Xtest, 0)):
             # Find z, pre-image
             z = self.obtain_preimage(i, n, c)
             self.Z.append(z)
-            #print("---", i/363)
+            # print("---", i/363)  # User information
         self.Z = np.array(self.Z)
         print("--- Succesfully finished!")
 
@@ -65,9 +66,9 @@ class kPCA():
         z_new = self.Xtest[j, :]
         z = np.zeros((10, 1))
         n_iter = 0
-        # Convergence defined as difference
-        #while (np.max(z - z_new) > 0.00001) and (n_iter < 1e3):
-        while (np.linalg.norm(z - z_new) > 0.0001) and (n_iter < 1e3):
+        # Convergence criteria, there might be different options
+        while (np.max(z - z_new) > 0.00001) and (n_iter < 1e3):
+        #while (np.linalg.norm(z - z_new) > 0.0001) and (n_iter < 1e3):
             z = z_new
             zcoeff = cdist([z], self.Xtrain, 'sqeuclidean')
             zcoeff = np.exp(-zcoeff/(n*c))
