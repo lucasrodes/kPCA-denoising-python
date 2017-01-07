@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def get_curves(points=300, radius=2, noise=None, *args, **kwargs):
+def get_curves(points=1000, radius=2, noise=None, *args, **kwargs):
     """
     Generates syntethic data in the shape of two quarter circles, as in
     the example from the paper by Mika et al.
@@ -35,8 +35,8 @@ def get_curves(points=300, radius=2, noise=None, *args, **kwargs):
     left_y = left_radius*sin
     right_center = 0.5
     right_radius = radius + dist(*args, **kwargs)
-    right_x = right_radius*cos + right_center
-    right_y = right_radius*sin
+    right_x = right_radius*cos[::-1] + right_center
+    right_y = right_radius*sin[::-1]
     return np.concatenate((left_x, right_x)), np.concatenate((left_y, right_y))
 
 def main():

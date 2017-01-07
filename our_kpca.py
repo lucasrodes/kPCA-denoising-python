@@ -47,13 +47,14 @@ class kPCA():
         print("--- Iterative scheme started...")
         self.Z = []
         # Obtain pre-image for each test sample (REVISE THIS STEP)
-        for i in range(np.size(self.Xtest, 0)):
+        for i in range(self.Xtest.shape[0]):
             # Find z, pre-image
             z = self.obtain_preimage(i, n, c)
             self.Z.append(z)
             # print("---", i/363)  # User information
         self.Z = np.array(self.Z)
         print("--- Succesfully finished!")
+        return self.Z
 
     def obtain_preimage(self, j, n, c):
         """
@@ -64,11 +65,10 @@ class kPCA():
                     Pn·rho(x)|^2, using eq. (10) from the paper.
         """
         z_new = self.Xtest[j, :]
-        z = np.zeros((10, 1))
+        z = np.zeros(z_new.shape)
         n_iter = 0
         # Convergence criteria, there might be different options
-        while (np.max(z - z_new) > 0.00001) and (n_iter < 1e3):
-        #while (np.linalg.norm(z - z_new) > 0.0001) and (n_iter < 1e3):
+        while (np.linalg.norm(z - z_new) > 0.00001) and (n_iter < 1e3):
             z = z_new
             zcoeff = cdist([z], self.Xtrain, 'sqeuclidean')
             zcoeff = np.exp(-zcoeff/(n*c))
@@ -80,6 +80,9 @@ class kPCA():
                 s += 1e-8
             z_new = zcoeff/s
             n_iter += 1
+        if np.array_equal(z_new, self.Xtest[j, :]):
+            import pdb
+            pdb.set_trace()
         return z_new
 
     def obtain_rbf_kernel_matrix(self, n, c):
