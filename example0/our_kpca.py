@@ -32,7 +32,7 @@ class kPCA():
         self.Ktrain = self.obtain_rbf_kernel_matrix(n, c)  # l_train x l_train
         print("--- Kernel matrix for train obtained")
         # Obtain eigenvectors from K
-        self.alphas = self.obtain_alphas(self.Ktrain, n)  # l_train x n
+        self.alphas, lambda_ = self.obtain_alphas(self.Ktrain, n)  # l_train x n
         print("--- Alphas obtained")
         # Obtain RBF Kernel Matrix for test data, dim: l_test x l_train (
         # REVISE THIS STEP)
