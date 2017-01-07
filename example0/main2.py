@@ -43,7 +43,9 @@ for sigma in Sigma:
                                         mean=centers[i],
                                         cov=sigma ** 2 * np.eye(N),
                                         size=S[1])), axis=0)
-    # Training data and test data with zero mean
+    
+    # Training data with zero mean, subtract the mean also to test data and centers.
+    # I think is necessary for PCA... but idk!
     mu = np.mean(train_data, 0)
     train_data -= mu
     test_data -= mu
