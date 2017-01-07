@@ -19,13 +19,18 @@ gamma	1		2		3		4		5		6		7		8		9
 0.8		1.04	1.14	1.20	1.24	1.38	1.41	1.45	1.53	1.70
 
 Possible explanations for the results :
-NAN results appear when the denominator in eq.(10) is 0. Maybe restart from another starting point ?
-I used the original test data as starting point in the iteration as suggested in the article.
-Our result seem to follow roughly the same variation as in the paper, one result for differences could be the use of the
+NAN results appear when the denominator in eq.(10) is 0. Maybe restart from
+another starting point ?
+I used the original test data as starting point in the iteration as suggested
+in the article.
+Our result seem to follow roughly the same variation as in the paper,
+one result for differences could be the use of the
 library PCA ?
-The library result seem to perform a lot less well than our implementation / the one in the paper : probably their
-implementation is for re-construction rather than de-noising, and not starting the iteration from the test-data can lead
-to other fixed points of (10) than the one closest to our data points, giving bad results especially when gamma is low.
+The library result seem to perform a lot less well than our implementation /
+the one in the paper : probably their implementation is for re-construction
+rather than de-noising, and not starting the iteration from the test-data can
+lead to other fixed points of (10) than the one closest to our data points,
+giving bad results especially when gamma is low.
 """
 
 import matplotlib.pyplot as plt
@@ -37,45 +42,71 @@ from sklearn.decomposition import PCA, KernelPCA
 
 MSEOurImpl = {}
 MSELib = {}
+N = 10 # Sample space dimension
+M = 11 # Number of Gaussians
+S = [100, 33] # Samples selected from each source for [training, test]
 
+# Iterate over the value of sigma
 for sigma in [0.05,0.1,0.2,0.4,0.8]:
-    gam = 1/(10*2*sigma*sigma)
+    gam = 1/(N*2*sigma**2) # gam = 1/(nc) in the paper, where c = 2*sigma**2
     MSEOurImpl[sigma] = {}
     MSELib[sigma] = {}
-    for n in range(1,10) :
+    
+    # Iterate over the amount of components used in the reconstruction
+    for n in range(1,N) :
 
-        # generate 11 gaussians :
-        # pick their centers :
-        centers = np.random.uniform(low=-1.0, high=1.0, size=(11,10))
-        # construct the train data :
-        train = np.random.multivariate_normal(mean=centers[0], cov=sigma*sigma*np.eye(10), size=100)
-        for i in range(1,11):
-            train = np.concatenate((train, np.random.multivariate_normal(mean=centers[i], cov=sigma*sigma*np.eye(10), size=100)), axis=0)
-        # construct the test data
-        test = np.random.multivariate_normal(mean=centers[0], cov=sigma*sigma*np.eye(10), size=33)
-        for i in range(1,11):
-            test = np.concatenate((test, np.random.multivariate_normal(mean=centers[i], cov=sigma*sigma*np.eye(10), size=33)), axis=0)
+        ## GENERATE TRAIN AND TEST DATA ##
+        # Pick centers of the M Gaussians
+        centers = np.random.uniform(low=-1.0, high=1.0, size=(M,N)) # M x N
+        # Construct train_data as a matrix of dimension (S[0]*M)xN,
+        # that is sample S[0] samples for each Gaussian. Each row of the
+        # matrix is an N-dimensional sample
+        train_data = np.random.multivariate_normal(mean=centers[0],
+                                                   cov=sigma**2*np.eye(N),
+                                                   size=S[0])
+        for i in range(1, M):
+            train_data = np.concatenate((train_data,
+                                         np.random.multivariate_normal(
+                                             mean=centers[i],
+                                             cov=sigma**2 * np.eye(N),
+                                             size=S[0])), axis=0)
 
-        # using libraries :
-        kpca = KernelPCA(n_components=n, kernel="rbf", fit_inverse_transform=True, gamma=gam)
-        kpca.fit(train)
-        test_transK = kpca.transform(test)
+
+        # Similarly to the train_data matrix, construct the test_data as a
+        # matrix of dimension (S[1]*M)xN
+        test_data = np.random.multivariate_normal(mean=centers[0],
+                                             cov=sigma**2*np.eye(N),
+                                             size=S[1])
+        for i in range(1, M):
+            test_data = np.concatenate((test_data,
+                                        np.random.multivariate_normal(
+                                            mean=centers[i],
+                                            cov=sigma**2*np.eye(N),
+                                            size=S[1])), axis=0)
+
+        ## APPLY KERNEL PCA ALGORITHMS ##
+
+        # Using Scikit libraries :
+        kpca = KernelPCA(n_components=n, kernel="rbf",
+                         fit_inverse_transform=True, gamma=gam)
+        kpca.fit(train_data)
+        test_transK = kpca.transform(test_data)
         ZK = kpca.inverse_transform(test_transK)
         pca = PCA(n_components=n)
-        pca.fit(train)
-        test_transL = pca.transform(test)
+        pca.fit(train_data)
+        test_transL = pca.transform(test_data)
         ZL = pca.inverse_transform(test_transL)
 
 
-
-        ### Using our code (gaussianPCA is inspired from the simple impl. we found) :
-        # start by finding alphas using slightly modified version of the online code (this is SLOW)
-        alpha = gaussianPCA.stepwise_kpca(train, gam, n)
+        # Using our code (gaussianPCA is inspired from the simple impl. we
+        # found) : start by finding alphas using slightly modified version
+        # of the online code (this is SLOW)
+        alpha = gaussianPCA.stepwise_kpca(train_data, gam, n)
         ZOurImpl = []
         # For each of the test points :
-        for x in test :
+        for x in test_data :
             # Deduce the betaKs
-            k = cdist([x],train, 'sqeuclidean')
+            k = cdist([x],train_data, 'sqeuclidean')
             k = exp(-gam * k)
             beta = np.sum(alpha*k.T, axis=0)
             # deduce the gamma_i :
@@ -86,10 +117,10 @@ for sigma in [0.05,0.1,0.2,0.4,0.8]:
             # iterate as in equation(10) until sufficient convergence
             while np.max(z-newZ)>0.00001 :
                 z = newZ
-                zcoeff = cdist([z],train, 'sqeuclidean')
+                zcoeff = cdist([z],train_data, 'sqeuclidean')
                 zcoeff = exp(-gam * zcoeff)
                 zcoeff = zcoeff * gamma.T
-                newZ = np.sum(train*zcoeff.T, axis=0)
+                newZ = np.sum(train_data*zcoeff.T, axis=0)
                 newZ = newZ / np.sum(zcoeff)
             ZOurImpl.append(newZ)
 
@@ -97,15 +128,16 @@ for sigma in [0.05,0.1,0.2,0.4,0.8]:
 
 
         ## Compute the MSE ##
-        # Substract the centers :
-        for i in range(363):
+        # Subtract the centers :
+        for i in range(np.size(test_data,0)):
             ZK[i] = ZK[i] - centers[i//33]
             ZL[i] = ZL[i] - centers[i//33]
             ZOurImpl[i] = ZOurImpl[i] - centers[i//33]
 
         # add it to the dictionnaty
-        MSEOurImpl[sigma][n] = (ZL**2).mean(axis=None)/(ZOurImpl**2).mean(axis=None)
-        MSELib[sigma][n] = (ZL**2).mean(axis=None)/(ZK**2).mean(axis=None)
+        MSEOurImpl[sigma][n] = (ZL ** 2).mean(axis=None) / (ZOurImpl ** 2).mean(
+            axis=None)
+        MSELib[sigma][n] = (ZL ** 2).mean(axis=None) / (ZK ** 2).mean(axis=None)
 
 
 ### Printing ###
@@ -115,11 +147,11 @@ print("ratios for the lib :")
 print(MSELib)
 
 print('gamma\t1\t\t2\t\t3\t\t4\t\t5\t\t6\t\t7\t\t8\t\t9\t\t')
-for gamma in MSEOurImpl :
+for gamma in MSEOurImpl:
     print('{}\t'.format(gamma), end="")
     if (gamma != 0.05):
         print('\t', end="")
-    for n in MSEOurImpl[gamma] :
+    for n in MSEOurImpl[gamma]:
         print('{0:.2f}\t'.format(MSEOurImpl[gamma][n]), end="")
     print('\n', end="")
 print('\n')
