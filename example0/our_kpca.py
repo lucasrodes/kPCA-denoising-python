@@ -91,23 +91,24 @@ class kPCA():
         """
         # Compute squared euclidean distances between all samples, store values
         # in a matrix
-        sqdist_X = euclidean_distances(self.Xtrain, self.Xtrain) ** 2
+        sqdist_X = euclidean_distances(self.Xtrain, self.Xtrain, squared=True)
         K = np.exp(-sqdist_X / (n * c))
         return self.center_kernel_matrix(K, K)
 
     @staticmethod
-    def center_kernel_matrix(K, Ktrain):
+    def center_kernel_matrix(K, K_train):
         """
         :param K: Kernel matrix that we aim to center
-        :param Ktrain: training Kernel matrix
+        :param K_train: training Kernel matrix
         :return: centered Kernel matrix
         Code inspired in Appendix D.2.2 Centering in Feature Space from [1]
         """
-        one_l_prime = np.ones((np.size(K, 0), np.size(K, 1))) / np.size(K, 1)
-        one_l = np.ones((np.size(Ktrain, 0), np.size(Ktrain, 1))) / np.size(
-            Ktrain, 1)
-        K = K - one_l_prime.dot(Ktrain) - K.dot(one_l) + one_l_prime.dot(
-            Ktrain).dot(one_l)
+        one_l_prime = np.ones(K.shape[0:2]) / K.shape[1]
+        one_l = np.ones(K_train.shape[0:2]) / K_train.shape[1]
+        K = K \
+            - np.dot(one_l_prime, K_train) \
+            - np.dot(K, one_l) \
+            + one_l_prime.dot(K_train).dot(one_l)
         return K
 
     def obtain_alphas(self, Ktrain, n):
@@ -118,20 +119,25 @@ class kPCA():
                   as a matrix of size l x n, i.e. (number of train data) x (
                   number of components).
         """
-        # Obtain eigenvalues and eigenvectors of K. The eigenvalue lambda_[i]
-        # corresponds to the eigenvector alpha[:,i].
-        lambda_, alpha = eigh(Ktrain)
-        # Keep only first n eigenvalues and eigenvectors, ensure that
+        # Obtain the n largest eigenvalues and eigenvectors of K.
+        # The results are in ascending order
+        # The eigenvalue lambda_[i] corresponds to the eigenvector alpha[:,i].
+        lambda_, alpha = eigh(Ktrain, eigvals=(Ktrain.shape[0]-n,Ktrain.shape[0]-1))
+
+        # Normalize the eigenvectors so that:
         # lambda_[i] (np.dot(alpha[:,i], alpha[:,i])) = 1
-        lambda_n = lambda_[:-n-1:-1]
-        alpha_n = np.column_stack(
-            (alpha[:, -i]/np.sqrt(lambda_n[i-1]) for i in range(1, n + 1)))
+        alpha_n = alpha / np.sqrt(lambda_)
+
+        # Order eigenvalues and eigenvectors in descending order
+        lambda_ = np.flipud(lambda_)
+        alpha_n = np.fliplr(alpha_n)
+
         """ debugging purposes
         i_sort = np.argsort(lambda_)
         lambda_check = lambda_[i_sort[-4]]
         alpha_check = alpha[:, i_sort[-4]]
         """
-        return alpha_n#, lambda_n#, lambda_check, alpha_check
+        return alpha_n, lambda_ #, lambda_check, alpha_check
 
     def obtain_test_rbf_kernel_matrix(self, n, c, Ktrain):
         """
