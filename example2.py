@@ -21,55 +21,101 @@ usps.update({
     'target': usps.target - 1
 })
 
-for noise_model in ['gaussian', 's&p']:
+if __name__ == '__main__':
+    for noise_model in ['gaussian', 's&p']:
 
-    # Show the first occurrence of each number, with and without noise
-    vals, locs = np.unique(usps.target, return_index=True)
-    for number, index in zip(vals, locs):
-        plt.subplot(5, 4, 2 * number + 1)
-        image = np.array(usps.data[index]).reshape((16, 16))
-        plt.imshow(image, cmap='gray', interpolation='none')
-        plt.title('Idx: {}'.format(index))
-        plt.axis('off')
-        plt.subplot(5, 4, 2 * number + 2)
-        image = np.array(usps[noise_model][index]).reshape((16, 16))
-        plt.imshow(image, cmap='gray', interpolation='none')
-        plt.axis('off')
-    plt.tight_layout()
-    plt.show()
-
-    # For each class, take 300 noiseless samples for training and 50 noisy for testing
-    # Show the image before and after denoising for the first 10 test samples
-    for number in range(10):
-        idx = np.random.choice(np.where(usps.target == number)[0], size=150, replace=False)
-        train_idx, test_idx = idx[:100], idx[-50:]
-
-        denoised = kPCA(usps.data[train_idx], usps[noise_model][test_idx]).obtain_preimages(20, 0.5)
-
-        for i in range(10):
-            plt.subplot(5, 4, 2 * i + 1)
-            plt.imshow(usps[noise_model][test_idx[i]].reshape((16, 16)), cmap='gray', interpolation='none')
-            plt.title('Idx: {}'.format(test_idx[i]))
+        # Show the first occurrence of each number, with and without noise
+        vals, locs = np.unique(usps.target, return_index=True)
+        for number, index in zip(vals, locs):
+            plt.subplot(5, 4, 2 * number + 1)
+            image = np.array(usps.data[index]).reshape((16, 16))
+            plt.imshow(image, cmap='gray', interpolation='none')
+            plt.title('Idx: {}'.format(index))
             plt.axis('off')
-            plt.subplot(5, 4, 2 * i + 2)
-            plt.imshow(denoised[i].reshape((16, 16)), cmap='gray', interpolation='none')
+            plt.subplot(5, 4, 2 * number + 2)
+            image = np.array(usps[noise_model][index]).reshape((16, 16))
+            plt.imshow(image, cmap='gray', interpolation='none')
             plt.axis('off')
         plt.tight_layout()
         plt.show()
 
-    # Consider class 3, take 300 noiseless samples for training and 50 noisy for testing
-    # Show the denoising process when run with a variable number of features
-    idx = np.random.choice(np.where(usps.target == 3)[0], size=150, replace=False)
-    train_idx, test_idx = idx[:100], idx[-50:]
+        # For each class, take 300 noiseless samples for training and 50 noisy for testing
+        # Show the image before and after denoising for the first 10 test samples
+        for number in range(10):
+            idx = np.random.choice(np.where(usps.target == number)[0], size=350, replace=False)
+            train_idx, test_idx = idx[:300], idx[-50:]
+            denoised = kPCA(usps.data[train_idx], usps[noise_model][test_idx]).obtain_preimages(20, 0.5)
 
-    for i, n_features in enumerate(range(2, 21, 2)):
-        denoised = kPCA(usps.data[train_idx], usps[noise_model][test_idx]).obtain_preimages(n_features, 0.5)
-        plt.subplot(5, 4, 2 * i + 1)
-        plt.imshow(usps[noise_model][test_idx[0]].reshape((16, 16)), cmap='gray', interpolation='none')
-        plt.title('Feat: {}'.format(n_features))
-        plt.axis('off')
-        plt.subplot(5, 4, 2 * i + 2)
-        plt.imshow(denoised[0].reshape((16, 16)), cmap='gray', interpolation='none')
-        plt.axis('off')
-    plt.tight_layout()
-    plt.show()
+            for i in range(10):
+                plt.subplot(5, 4, 2 * i + 1)
+                plt.imshow(usps[noise_model][test_idx[i]].reshape((16, 16)), cmap='gray', interpolation='none')
+                plt.title('Idx: {}'.format(test_idx[i]))
+                plt.axis('off')
+                plt.subplot(5, 4, 2 * i + 2)
+                plt.imshow(denoised[i].reshape((16, 16)), cmap='gray', interpolation='none')
+                plt.axis('off')
+            plt.tight_layout()
+            plt.show()
+
+        # For each class, take 300 noiseless samples for training and 50 noisy for testing.
+        # Put all the samples together in a 10*300 training dataset and 10*50 testing dataset.
+        # Show the image before and after denoising for the first occurrence of each class.
+        train_idx = []
+        test_idx = []
+        for number in range(10):
+            idx = np.random.choice(np.where(usps.target == number)[0], size=350, replace=False).tolist()
+            train_idx += idx[:300]
+            test_idx += idx[-50:]
+
+        denoised = kPCA(usps.data[train_idx], usps[noise_model][test_idx]).obtain_preimages(20, 0.5)
+
+        _, locs = np.unique(usps.target[test_idx], return_index=True)
+        for plt_i, data_i in enumerate(locs):
+            plt.subplot(5, 4, 2 * plt_i + 1)
+            plt.imshow(usps[noise_model][test_idx[data_i]].reshape((16, 16)), cmap='gray', interpolation='none')
+            plt.title('Idx: {}'.format(test_idx[data_i]))
+            plt.axis('off')
+            plt.subplot(5, 4, 2 * plt_i + 2)
+            plt.imshow(denoised[data_i].reshape((16, 16)), cmap='gray', interpolation='none')
+            plt.axis('off')
+        plt.tight_layout()
+        plt.show()
+
+        # Consider class 3, take 300 noiseless samples for training and 50 noisy for testing
+        # Show the denoising process when run with a variable number of features
+        idx = np.random.choice(np.where(usps.target == 3)[0], size=350, replace=False)
+        train_idx, test_idx = idx[:300], idx[-50:]
+        for i, n_features in enumerate(range(2, 21, 2)):
+            denoised = kPCA(usps.data[train_idx], usps[noise_model][test_idx]).obtain_preimages(n_features, 0.5)
+            plt.subplot(5, 4, 2 * i + 1)
+            plt.imshow(usps[noise_model][test_idx[0]].reshape((16, 16)), cmap='gray', interpolation='none')
+            plt.title('Feat: {}'.format(n_features))
+            plt.axis('off')
+            plt.subplot(5, 4, 2 * i + 2)
+            plt.imshow(denoised[0].reshape((16, 16)), cmap='gray', interpolation='none')
+            plt.axis('off')
+        plt.tight_layout()
+        plt.show()
+
+        # For each class, take 300 noiseless samples for training and 50 noisy for testing.
+        # Put all the samples together in a 10*300 training dataset and 10*50 testing dataset.
+        # Show the denoising process when run with a variable number of features.
+        # Examples are made on class 3.
+        train_idx = []
+        test_idx = []
+        for number in range(10):
+            idx = np.random.choice(np.where(usps.target == number)[0], size=350, replace=False).tolist()
+            train_idx += idx[:300]
+            test_idx += idx[-50:]
+
+        for i, n_features in enumerate(range(2, 21, 2)):
+            denoised = kPCA(usps.data[train_idx], usps[noise_model][test_idx]).obtain_preimages(n_features, 0.5)
+            plt.subplot(5, 4, 2 * i + 1)
+            plt.imshow(usps[noise_model][test_idx[50 * 3]].reshape((16, 16)), cmap='gray', interpolation='none')
+            plt.title('Feat: {}'.format(n_features))
+            plt.axis('off')
+            plt.subplot(5, 4, 2 * i + 2)
+            plt.imshow(denoised[50 * 3].reshape((16, 16)), cmap='gray', interpolation='none')
+            plt.axis('off')
+        plt.tight_layout()
+        plt.show()
