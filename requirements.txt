@@ -16,3 +16,4 @@ scipy==0.18.1
 six==1.10.0
 sklearn==0.0
 toolz==0.8.2
+rpy2==2.8.5
