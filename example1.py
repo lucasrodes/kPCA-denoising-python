@@ -30,7 +30,7 @@ def pca_denoising(data):
 X, Y = data.get_curves(noise='normal', scale=0.2)
 noisy_data = np.array([X, Y]).T
 methods = [
-    (kPCA(noisy_data, noisy_data).obtain_preimages(4, 0.5), 'Kernel PCA'),
+    (kPCA(noisy_data).obtain_preimages(4, 0.5), 'Kernel PCA'),
     (fit_curve(noisy_data), 'Principal Curves'),
     (pca_denoising(noisy_data), 'Linear PCA')
 ]
@@ -40,7 +40,7 @@ show_plot(methods)
 X, Y = data.get_square(noise='normal', scale=0.2)
 noisy_data = np.array([X, Y]).T
 methods = [
-    (kPCA(noisy_data, noisy_data).obtain_preimages(4, 0.6), 'Kernel PCA'),
+    (kPCA(noisy_data).obtain_preimages(4, 0.6), 'Kernel PCA'),
     (fit_curve(noisy_data), 'Principal Curves'),
     (fit_curve(noisy_data, circle=True), 'Principal Curves (starting from a circle)'),
     (pca_denoising(noisy_data), 'Linear PCA')

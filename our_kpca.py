@@ -8,14 +8,14 @@ from scipy.spatial.distance import cdist
 # How to compute matrix K ?
 
 class kPCA():
-    l = 0  # Number of samples in training
-    N = 0  # Dimensionality
 
-    def __init__(self, train_data, test_data):
+    def __init__(self, train_data, test_data = None):
         """
         :param train_data: samples from the train data
         :param test_data: samples from the test data
         """
+        if test_data is None:
+            test_data = train_data
         self.Xtrain = train_data  # l_train x N
         self.Xtest = test_data  # l_test x N
         self.l_train = np.size(train_data, 0)
@@ -32,7 +32,7 @@ class kPCA():
         self.Ktrain = self.obtain_rbf_kernel_matrix(n, c)  # l_train x l_train
         print("--- Kernel matrix for train obtained")
         # Obtain eigenvectors from K
-        self.alphas, lambda_ = self.obtain_alphas(self.Ktrain, n)  # l_train x n
+        self.alphas = self.obtain_alphas(self.Ktrain, n)  # l_train x n
         print("--- Alphas obtained")
         # Obtain RBF Kernel Matrix for test data, dim: l_test x l_train (
         # REVISE THIS STEP)
@@ -140,7 +140,7 @@ class kPCA():
         lambda_check = lambda_[i_sort[-4]]
         alpha_check = alpha[:, i_sort[-4]]
         """
-        return alpha_n, lambda_ #, lambda_check, alpha_check
+        return alpha_n #, lambda_check, alpha_check
 
     def obtain_test_rbf_kernel_matrix(self, n, c, Ktrain):
         """
