@@ -39,10 +39,10 @@ class kPCA():
         self.Ktest = self.obtain_test_rbf_kernel_matrix(n, c, self.Ktrain)
         print("--- Kernel matrix for test obtained")
         # Obtain betas
-        self.betas = np.dot(self.Ktest, self.alphas)  # l_test x n
+        self.betas = self.obtain_betas() # l_test x n
         print("--- Betas obtained")
         # Obtain gammas, gamma[j, i] corresponds to tj (test) abd xi (train)
-        self.gammas = np.dot(self.betas, self.alphas.T)  # l_test x l_train
+        self.gammas = self.obtain_gammas()  # l_test x l_train
         print("--- Gammas obtained")
         print("--- Iterative scheme started...")
         self.Z = []
@@ -85,6 +85,11 @@ class kPCA():
             pdb.set_trace()
         return z_new
 
+    def obtain_betas(self):
+        return np.dot(self.Ktest, self.alphas)  # l_test x n
+
+    def obtain_gammas(self):
+        return np.dot(self.betas, self.alphas.T)
     def obtain_rbf_kernel_matrix(self, n, c):
         """
         :param n: number of components used in reconstruction
