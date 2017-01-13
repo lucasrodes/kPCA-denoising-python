@@ -86,10 +86,18 @@ class kPCA():
         return z_new
 
     def obtain_betas(self):
+        """
+        return: projections of all test samples onto the n first principal
+                components.
+        """
         return np.dot(self.Ktest, self.alphas)  # l_test x n
 
     def obtain_gammas(self):
+        """
+        return: Weights gammas, used for final computation of the pre-images.
+        """
         return np.dot(self.betas, self.alphas.T)
+
     def obtain_rbf_kernel_matrix(self, n, c):
         """
         :param n: number of components used in reconstruction
