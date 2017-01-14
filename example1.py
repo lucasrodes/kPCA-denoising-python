@@ -6,6 +6,10 @@ import numpy as np
 import our_kpca
 import data
 
+# Enable this to use LaTeX fonts in the plot labeling
+# plt.rc('text', usetex=True)
+# plt.rc('font', family='serif')
+
 def plot(methods, X, Y, line):
     "Plots all results in the input list as a series of subplots"
     n_methods = len(methods)
