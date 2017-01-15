@@ -85,11 +85,14 @@ def get_square(points=1000, length=4, noise=None, *args, **kwargs):
 
 def main():
     "Example data generation"
-    X, Y = get_curves()
+    X, Y = get_curves(noise='normal', scale=0.2)
     import matplotlib.pyplot as plt
+    plt.subplot2grid((3, 1), (0, 0))
+    plt.axis('off')
     plt.plot(X, Y ,'k.')
-    plt.show()
-    X, Y = get_square()
+    plt.subplot2grid((3, 1), (1, 0), rowspan = 2)
+    plt.axis('off')
+    X, Y = get_square(noise='normal', scale=0.2)
     plt.plot(X, Y ,'k.')
     plt.show()
 
