@@ -22,33 +22,8 @@ You can install them by typing
 pip3 install -r requirements.txt
 ```
 
-#### Virtualenv setup
-We strongly recommend using a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) in order to keep these dependencies isolated from the rest of the system. Follow the instructions below to set up you virtual environment.
+We strongly recommend using a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) in order to keep these dependencies isolated from the rest of the system. Follow the instructions [here](files/setupvenv.md) to set up you virtual environment.
 
-Install virtualenv
-``` bash
-sudo apt install python3-venv
-```
-Create a virtualenv somewhere
-``` bash
-python3 -m venv <env name>
-```
-Activate the environment and move to the ```<repo folder>```
-``` bash
-. <env name>/bin/activate
-```
-The first time, install the packages from ```requirements.txt```
-``` bash
-pip install -r requirements.txt
-```
-(If you install something with ```pip install``` remember to dump the packages installed and push the new requirements)
-``` bash
-pip freeze > requirements.txt
-```
-Deactivate the environment
-``` bash
-deactivate
-```
 
 
 ## Running the experiments
@@ -84,7 +59,7 @@ python3 example2.py
 
 Once the execution has ended, a picture as follows should be displayed.
 
-![alt text](img/figure_1.png)
+![alt text](files/figure_1.png)
 
 You might get some warnings, just ignore them.
 
