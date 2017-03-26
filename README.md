@@ -2,15 +2,34 @@
 Project in DD2434 Machine Learning Advance Course, Winter 2016
 
 ## What did we do?
-We reproduced the experiments presented in the paper [Kernel PCA and Denoising in Feature Spaces](paper.pdf) by Sebastian Mika, Bernhard Schölkopf, Alex Smola Klaus-Robert Müller, Matthias Scholz and Gunnar Rätsch.
+We reproduced the experiments presented in the paper [Kernel PCA and De-noising in Feature Spaces](docs/paper.pdf) by Sebastian Mika, Bernhard Schölkopf, Alex Smola Klaus-Robert Müller, Matthias Scholz and Gunnar Rätsch. In this regard, you can read our [report](docs/report.pdf) and our [presentation](docs/presentation.pdf)
 
-## How we will work?
+## The experiments
 
-- We will work on the report in [Overleaf](www.overleaf.com)
-- Coding related files will be stored here
-- Presentation slides [Google]
 
-## Virtualenv setup
+In the paper, there are three major experiments:
+
+* Toy example: 11 Gaussians
+* Toy example: De-noising
+* Digit denoising (USPS Dataset)
+
+## Toy example: 11 Gaussians
+The code related to this example can be found in [example1.py](example1.py)
+
+```
+python example0.py
+```
+
+## Toy example: De-noising
+The code related to this example can be found in [example2.py](example2.py)
+
+## Digit denoising (USPS Dataset)
+The code related to this example can be found in [example3.py](example3.py)
+
+
+Feel free to run the python files containing
+
+### Virtualenv setup
 Install virtualenv
 ``` bash
 sudo apt install python3-venv
