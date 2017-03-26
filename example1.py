@@ -43,7 +43,7 @@ for sigma in Sigma:
                                         mean=centers[i],
                                         cov=sigma ** 2 * np.eye(N),
                                         size=S[1])), axis=0)
-    
+
     # Training data with zero mean, subtract the mean also to test data and centers.
     # I think is necessary for PCA... but idk!
     mu = np.mean(train_data, 0)
@@ -82,10 +82,11 @@ for sigma in Sigma:
 
         # Information for user
         #"""
-        print("ratio_MSE =", mse_pca/mse_kpca)
-        print("kPCA MSE = ", mse_kpca)
-        print("PCA MSE = ", mse_pca)
-        #"""
+        print("")
+        print("ratio_MSE =", mse_pca[0][0]/mse_kpca[0][0])
+        print("kPCA MSE = ", mse_kpca[0][0])
+        print("PCA MSE = ", mse_pca[0][0])
+        print("")
         print(count, "/", (len(Sigma)*(N-1)))
         print("")
         count += 1

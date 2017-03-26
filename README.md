@@ -13,17 +13,23 @@ In the paper, there are three major experiments:
 * Toy example: De-noising
 * Digit denoising (USPS Dataset)
 
-## Toy example: 11 Gaussians
-The code related to this example can be found in [example1.py](example1.py)
+However, prior to
 
+### Toy example: 11 Gaussians
+The code related to this example can be found in [example1.py](example1.py).
+
+Run the script as
 ```
-python example0.py
+python3 example1.py
 ```
 
-## Toy example: De-noising
+By default, you should obtain the results (kPCA MSE, PCA PCA and their ratio) for 45 different settings of sigma.
+
+
+### Toy example: De-noising
 The code related to this example can be found in [example2.py](example2.py)
 
-## Digit denoising (USPS Dataset)
+### Digit denoising (USPS Dataset)
 The code related to this example can be found in [example3.py](example3.py)
 
 
