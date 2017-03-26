@@ -1,7 +1,10 @@
 # dd2434-project
 Project in DD2434 Machine Learning Advance Course, Winter 2016
 
-## How we will work?
+## What did we do?
+We reproduced the experiments presented in the paper [Kernel PCA and Denoising in Feature Spaces](paper.pdf) by Sebastian Mika, Bernhard Schölkopf, Alex Smola Klaus-Robert Müller, Matthias Scholz and Gunnar Rätsch.
+
+## How we will work?
 
 - We will work on the report in [Overleaf](www.overleaf.com)
 - Coding related files will be stored here
@@ -33,7 +36,7 @@ Deactivate the environment
 deactivate
 ```
 
-## Stuff to do
+## Stuff to do
 - Receive confirmation of paper acceptance
 - Read [paper](1491-kernel-pca-and-de-noising-in-feature-spaces.pdf)
 - Summarize the paper for our colleagues
