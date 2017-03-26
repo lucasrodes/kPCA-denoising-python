@@ -36,7 +36,7 @@ python3 example2.py
 
 Once the execution has ended, a picture as follows should be displayed.
 
-![alt text][img/figure]
+![alt text](img/figure)
 
 You might get some warnings, just ignore them.
 ### Digit denoising (USPS Dataset)
