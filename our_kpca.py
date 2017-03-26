@@ -9,10 +9,12 @@ from scipy.spatial.distance import cdist
 
 class kPCA():
 
-    def __init__(self, train_data, test_data = None):
+    def __init__(self, train_data, test_data = None, denoise=True):
         """
         :param train_data: samples from the train data
         :param test_data: samples from the test data
+        :param denoise: True if the initialization of the iterative algorithm
+                        is known (de-noising), False otherwise (reconstruction)
         """
         if test_data is None:
             test_data = train_data
@@ -21,6 +23,7 @@ class kPCA():
         self.l_train = np.size(train_data, 0)
         self.l_test = np.size(test_data, 0)
         self.N = np.size(train_data, 1)
+        self.denoise=denoise
 
     def obtain_preimages(self, n, c):
         """
@@ -64,7 +67,11 @@ class kPCA():
         :return: pre-image of Xtest[j,:], that is z that minimizes |rho(z) -
                     Pn·rho(x)|^2, using eq. (10) from the paper.
         """
-        z_new = self.Xtest[j, :]
+        if self.denoise:
+            z_new = self.Xtest[j, :]
+        else:
+            z_new = np.zeros_like(self.Xtest[j, :])#np.random.rand(self.Xtest.shape[1])
+
         z = np.zeros(z_new.shape)
         n_iter = 0
         # Convergence criteria, there might be different options

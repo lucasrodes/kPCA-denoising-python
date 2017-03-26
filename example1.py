@@ -53,7 +53,7 @@ for sigma in Sigma:
 
     # RUN KPCA OVER THE DATA #
     # Initialize the kernel PCA object
-    kpca = our_kpca.kPCA(train_data, test_data)
+    kpca = kPCA(train_data, test_data)
 
     # Iterate over all considered number of components
     for n in range(1, N):

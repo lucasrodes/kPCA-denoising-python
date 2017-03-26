@@ -7,7 +7,7 @@ from sklearn.decomposition import PCA
 from our_kpca import kPCA
 
 # Fetch dataset and display info
-usps = fetch_mldata('usps')
+usps = fetch_mldata('USPS')
 print('Dataset info:', usps.DESCR)
 print('Datapoints: {0}\nFeatures: {1}'.format(*usps.data.shape))
 

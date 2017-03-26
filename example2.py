@@ -3,7 +3,7 @@ from our_kpca import kPCA
 from princurves import fit_curve
 import matplotlib.pyplot as plt
 import numpy as np
-import our_kpca
+from our_kpca import kPCA
 import data_example2 as data
 
 # Enable this to use LaTeX fonts in the plot labeling
