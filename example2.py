@@ -4,7 +4,7 @@ from princurves import fit_curve
 import matplotlib.pyplot as plt
 import numpy as np
 import our_kpca
-import data
+import data_example2 as data
 
 # Enable this to use LaTeX fonts in the plot labeling
 plt.rc('text', usetex=True)

@@ -39,11 +39,16 @@ Once the execution has ended, a picture as follows should be displayed.
 ![alt text](img/figure_1.png)
 
 You might get some warnings, just ignore them.
+
 ### Digit denoising (USPS Dataset)
 The code related to this example can be found in [example3.py](example3.py)
 
+Run the script as
+```
+python3 example3.py
+```
 
-Feel free to run the python files containing
+
 
 ### Virtualenv setup
 Install virtualenv
@@ -70,32 +75,3 @@ Deactivate the environment
 ``` bash
 deactivate
 ```
-
-## Stuff to do
-- Receive confirmation of paper acceptance
-- Read [paper](1491-kernel-pca-and-de-noising-in-feature-spaces.pdf)
-- Summarize the paper for our colleagues
-- Implementation
-- Create nice examples (data, plots...)
-  - [Example 1](http://scikit-learn.org/stable/auto_examples/decomposition/plot_kernel_pca.html)
-  - [Example 2](http://sebastianraschka.com/Articles/2014_kernel_pca.html)
-- Write report
-- Prepare presentation slides and rehearse
-- Sign up for presentation?
-
-## Roadmap
-| Deadline   | What                                     |
-|------------|------------------------------------------|
-| 22/12/2016 | Starting project                         |
-| 24/12/2016 | Reading finished                         |
-| 04/01/2017 | Summary ready                            |
-| 04/01/2017 | Implementation ended                     |
-| 07/01/2017 | Examples implementation                  |
-| 10/01/2017 | 1st Draft of the report                  |
-| 15/01/2017 | Presentation finished, Presentation test |
-| 16/01/2017 | Day of the presentation (sign up?)       |
-
-## Interesting links
-- [Kernel Principal Component Analysis and its Applications in Face Recognition and Active Shape Models](https://arxiv.org/pdf/1207.3538v3.pdf)
-- [Support Vector Learning](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.35.380&rep=rep1&type=pdf)
-- [sklearn.decomposition.KernelPCA](http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.KernelPCA.html)
