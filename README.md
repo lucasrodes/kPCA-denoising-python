@@ -29,6 +29,16 @@ By default, you should obtain the results (kPCA MSE, PCA PCA and their ratio) fo
 ### Toy example: De-noising
 The code related to this example can be found in [example2.py](example2.py)
 
+Run the script as
+```
+python3 example2.py
+```
+
+Once the execution has ended, a picture as follows should be displayed.
+
+![alt text][img/figure]
+
+You might get some warnings, just ignore them.
 ### Digit denoising (USPS Dataset)
 The code related to this example can be found in [example3.py](example3.py)
 
