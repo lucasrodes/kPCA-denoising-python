@@ -1,8 +1,8 @@
 # dd2434-project
-Project in DD2434 Machine Learning Advance Course, Winter 2016
+Project in [DD2434 Machine Learning Advance Course](http://www.kth.se/student/kurser/kurs/DD2434?l=en), Winter 2016.
 
 ## What did we do?
-We reproduced the experiments presented in the paper [Kernel PCA and De-noising in Feature Spaces](docs/paper.pdf) by Sebastian Mika, Bernhard Schölkopf, Alex Smola Klaus-Robert Müller, Matthias Scholz and Gunnar Rätsch. In this regard, you can read our [report](docs/report.pdf) and our [presentation](docs/presentation.pdf)
+We reproduced the experiments presented in the paper [Kernel PCA and De-noising in Feature Spaces](docs/paper.pdf) by Sebastian Mika, Bernhard Schölkopf, Alex Smola Klaus-Robert Müller, Matthias Scholz and Gunnar Rätsch. In this regard, you can read our [report](docs/report.pdf) and our [presentation](docs/presentation.pdf).
 
 
 ## Dependencies
@@ -35,7 +35,7 @@ In the paper, there are three major experiments:
 * Toy example: De-noising
 * Digit denoising (USPS Dataset)
 
-The file [our_kpca.py](our_kpca.py) is our own implementation of the kPCA method, based on the paper approach.
+The file [our_kpca.py](our_kpca.py) contains our own implementation of the kPCA method, based on the paper approach.
 
 ### Toy example: 11 Gaussians
 The code related to this example can be found in [example1.py](example1.py).
@@ -45,7 +45,7 @@ Run the script as
 python3 example1.py
 ```
 
-By default, you should obtain the results (kPCA MSE, PCA PCA and their ratio) for 45 different settings of sigma.
+By default, this script outputs the kPCA MSE, PCA MSE and their ratio for 45 different settings of sigma.
 
 
 
@@ -57,7 +57,7 @@ Run the script as
 python3 example2.py
 ```
 
-Once the execution has ended, a picture as follows should be displayed.
+Once the execution has ended, a picture as follows will be displayed.
 
 ![alt text](files/figure_1.png)
 
